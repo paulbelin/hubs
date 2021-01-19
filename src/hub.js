@@ -175,7 +175,7 @@ const store = window.APP.store;
 store.update({ preferences: { shouldPromptForRefresh: undefined } }); // Clear flag that prompts for refresh from preference screen
 const mediaSearchStore = window.APP.mediaSearchStore;
 const OAUTH_FLOW_PERMS_TOKEN_KEY = "ret-oauth-flow-perms-token";
-const NOISY_OCCUPANT_COUNT = 12; // Above this # of occupants, we stop posting join/leaves/renames
+const NOISY_OCCUPANT_COUNT = 30; // Above this # of occupants, we stop posting join/leaves/renames
 
 const qs = new URLSearchParams(location.search);
 const isMobile = AFRAME.utils.device.isMobile();
@@ -310,43 +310,10 @@ function remountUI(props) {
   mountUI(uiProps);
 }
 
-function setupPeerConnectionConfig(adapter, host, turn) {
+function setupPeerConnectionConfig(adapter) {
   const forceTurn = qs.get("force_turn");
   const forceTcp = qs.get("force_tcp");
-  const peerConnectionConfig = {};
-
-  if (turn && turn.enabled) {
-    const iceServers = [];
-
-    turn.transports.forEach(ts => {
-      // Try both TURN DTLS and TCP/TLS
-      if (!forceTcp) {
-        iceServers.push({ urls: `turns:${host}:${ts.port}`, username: turn.username, credential: turn.credential });
-      }
-
-      iceServers.push({
-        urls: `turns:${host}:${ts.port}?transport=tcp`,
-        username: turn.username,
-        credential: turn.credential
-      });
-    });
-
-    iceServers.push({ urls: "stun:stun1.l.google.com:19302" });
-
-    peerConnectionConfig.iceServers = iceServers;
-    peerConnectionConfig.iceTransportPolicy = "all";
-
-    if (forceTurn || forceTcp) {
-      peerConnectionConfig.iceTransportPolicy = "relay";
-    }
-  } else {
-    peerConnectionConfig.iceServers = [
-      { urls: "stun:stun1.l.google.com:19302" },
-      { urls: "stun:stun2.l.google.com:19302" }
-    ];
-  }
-
-  adapter.setPeerConnectionConfig(peerConnectionConfig);
+  adapter.setTurnConfig(forceTcp, forceTurn);
 }
 
 async function updateEnvironmentForHub(hub, entryManager) {
@@ -579,12 +546,8 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
           if (newHostPollInterval) return;
 
           newHostPollInterval = setInterval(async () => {
-            const currentServerURL = NAF.connection.adapter.serverUrl;
-            const { host, port, turn } = await hubChannel.getHost();
-            const newServerURL = `wss://${host}:${port}`;
-
-            setupPeerConnectionConfig(adapter, host, turn);
-
+            const currentServerURL = scene.getAttribute("networked-scene").serverURL;
+            const newServerURL = adapter.serverURL;
             if (currentServerURL !== newServerURL) {
               console.log("Connecting to new Janus server " + newServerURL);
               scene.setAttribute("networked-scene", { serverURL: newServerURL });
@@ -1427,9 +1390,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const permsToken = oauthFlowPermsToken || data.perms_token;
       hubChannel.setPermissionsFromToken(permsToken);
 
-      const janusHost = data.hubs[0].host;
-      const janusTurn = data.hubs[0].turn;
-
       scene.addEventListener("adapter-ready", async ({ detail: adapter }) => {
         // HUGE HACK Safari does not like it if the first peer seen does not immediately
         // send audio over its media stream. Otherwise, the stream doesn't work and stays
@@ -1466,7 +1426,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         adapter.setClientId(socket.params().session_id);
         adapter.setJoinToken(data.perms_token);
-        setupPeerConnectionConfig(adapter, janusHost, janusTurn);
+        setupPeerConnectionConfig(adapter);
 
         hubChannel.addEventListener("permissions-refreshed", e => adapter.setJoinToken(e.detail.permsToken));
 
@@ -1565,7 +1525,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.APP.hub = hub;
     updateUIForHub(hub, hubChannel);
 
-    if (stale_fields.includes("scene")) {
+    if (
+      stale_fields.includes("scene") ||
+      stale_fields.includes("scene_listing") ||
+      stale_fields.includes("default_environment_gltf_bundle_url")
+    ) {
       const fader = document.getElementById("viewing-camera").components["fader"];
 
       fader.fadeOut().then(() => {
