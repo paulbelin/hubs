@@ -93,6 +93,7 @@ import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
+import IframePanel from "./iframe-panel";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -180,6 +181,9 @@ class UIRoot extends Component {
     showPrefs: false,
     watching: false,
     isStreaming: false,
+
+    showIframePanel: false,
+    iframePanelSrc: null,
 
     waitingOnAudio: false,
     audioTrackClone: null,
@@ -301,6 +305,9 @@ class UIRoot extends Component {
     this.props.scene.addEventListener("action_toggle_ui", () =>
       this.setState({ hide: !this.state.hide, hideUITip: false })
     );
+    this.props.scene.addEventListener("open_iframe_panel", event => {
+      this.setState({ showIframePanel: true, iframePanelSrc: event.detail });
+    });
     this.props.scene.addEventListener("devicechange", () => {
       this.forceUpdate();
     });
@@ -980,6 +987,17 @@ class UIRoot extends Component {
           }}
           store={this.props.store}
           scene={this.props.scene}
+        />
+      );
+    }
+
+    if (this.state.showIframePanel && this.state.iframePanelSrc) {
+      return (
+        <IframePanel
+          src={this.state.iframePanelSrc}
+          onClose={() => {
+            this.setState({ showIframePanel: false, iframePanelSrc: null });
+          }}
         />
       );
     }

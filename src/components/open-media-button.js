@@ -57,7 +57,9 @@ AFRAME.registerComponent("open-media-button", {
         location.href = this.src;
       } else {
         await exitImmersive();
-        window.open(this.src);
+        // Open in an iframe panel instead of a new browser tab
+        this.el.sceneEl.emit("open_iframe_panel", this.src);
+        // window.open(this.src);
       }
     };
 
