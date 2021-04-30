@@ -1,10 +1,10 @@
 @use '../styles/theme';
 
 :local(.toolbar) {
-  height: 96px;
+  height: 86px;
   display: flex;
   padding: 12px;
-  background-color: theme.$background1-color;
+  background-color: theme.$white-transparent; // theme.$background1-color;
   border-top: 1px solid theme.$border1-color;
 
   @media (min-width: theme.$breakpoint-lg) {

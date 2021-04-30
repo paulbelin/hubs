@@ -25,7 +25,13 @@
   grid-column-start: sidebar;
   height: 100%;
   overflow: hidden;
-  width: 450px;
+  width: 350px;
+  
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 86px;
+  height: auto;
 
   @media(max-width: theme.$breakpoint-lg - 1), (max-height: theme.$breakpoint-vr - 1) {
     position: fixed;
@@ -56,6 +62,9 @@
   grid-column-end: -1;
   pointer-events: auto;
   z-index: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 :local(.modal-container) {

@@ -4,6 +4,8 @@ import styles from "./PeopleSidebar.scss";
 import { Sidebar } from "../sidebar/Sidebar";
 import { CloseButton } from "../input/CloseButton";
 import { IconButton } from "../input/IconButton";
+import { ToolbarButton } from "../input/ToolbarButton";
+import { ReactComponent as PeopleIcon } from "../icons/People.svg";
 import { ReactComponent as StarIcon } from "../icons/Star.svg";
 import { ReactComponent as DesktopIcon } from "../icons/Desktop.svg";
 import { ReactComponent as DiscordIcon } from "../icons/Discord.svg";
@@ -156,3 +158,14 @@ PeopleSidebar.defaultProps = {
   people: [],
   onSelectPerson: () => {}
 };
+
+export function PeopleToolbarButton(props) {
+  return (
+    <ToolbarButton
+      {...props}
+      icon={<PeopleIcon />}
+      preset="accent4"
+      label={<FormattedMessage id="content-menu.people-menu-button" defaultMessage="People" />}
+    />
+  );
+}

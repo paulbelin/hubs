@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { PeopleSidebar } from "./PeopleSidebar";
+import { PeopleSidebar, PeopleToolbarButton } from "./PeopleSidebar";
 import { getMicrophonePresences } from "../../utils/microphone-presence";
 import ProfileEntryPanel from "../profile-entry-panel";
 import { UserProfileSidebarContainer } from "./UserProfileSidebarContainer";
@@ -141,3 +141,7 @@ PeopleSidebarContainer.propTypes = {
   onCloseDialog: PropTypes.func.isRequired,
   showNonHistoriedDialog: PropTypes.func.isRequired
 };
+
+export function PeopleToolbarButtonContainer(props) {
+  return <PeopleToolbarButton {...props} />;
+}
