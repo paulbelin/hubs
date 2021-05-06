@@ -70,6 +70,7 @@ import { ReactComponent as LeaveIcon } from "./icons/Leave.svg";
 import { ReactComponent as EnterIcon } from "./icons/Enter.svg";
 import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
 import { PeopleSidebarContainer, PeopleToolbarButtonContainer, userFromPresence } from "./room/PeopleSidebarContainer";
+import { WaypointsSidebarContainer, WaypointsToolbarButtonContainer } from "./room/WaypointsSidebarContainer";
 import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
 import { ObjectMenuContainer } from "./room/ObjectMenuContainer";
@@ -1450,6 +1451,9 @@ class UIRoot extends Component {
                           performConditionalSignIn={this.props.performConditionalSignIn}
                         />
                       )}
+                      {this.state.sidebarId === "waypoints" && (
+                        <WaypointsSidebarContainer scene={this.props.scene} onClose={() => this.setSidebar(null)} />
+                      )}
                       {this.state.sidebarId === "profile" && (
                         <ProfileEntryPanel
                           history={this.props.history}
@@ -1558,6 +1562,7 @@ class UIRoot extends Component {
                     )}
                     <PeopleToolbarButtonContainer onClick={() => this.toggleSidebar("people")} />
                     <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
+                    {entered && <WaypointsToolbarButtonContainer onClick={() => this.toggleSidebar("waypoints")} />}
                     {entered &&
                       isMobileVR && (
                         <ToolbarButton
