@@ -12,7 +12,7 @@ import { FormattedMessage } from "react-intl";
 export function WaypointsSidebarItem({ waypoint, ...rest }) {
   return (
     <ButtonListItem {...rest} className={classNames(styles.object)} type="button" aria-label={waypoint.className}>
-      <p>{waypoint.className}</p>
+      <p>{waypoint.className.replace(/_/g, " ")}</p>
     </ButtonListItem>
   );
 }
