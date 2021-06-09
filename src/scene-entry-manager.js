@@ -1,5 +1,6 @@
 import qsTruthy from "./utils/qs_truthy";
 import nextTick from "./utils/next-tick";
+import postActivityLog from "./utils/room-activity-logs";
 import pinnedEntityToGltf from "./utils/pinned-entity-to-gltf";
 import { hackyMobileSafariTest } from "./utils/detect-touchscreen";
 import { SignInMessages } from "./react-components/auth/SignInModal";
@@ -126,6 +127,17 @@ export default class SceneEntryManager {
     if (muteOnEntry) {
       this.scene.emit("action_mute");
     }
+
+    // Post entry activity to DB
+    const data = {
+      displayName: this.avatarRig.components["player-info"].displayName,
+      muteOnEntry,
+      enterInVR,
+      isMobile,
+      isMobileVR,
+      isIOS
+    };
+    postActivityLog("entered", data);
   };
 
   whenSceneLoaded = callback => {
