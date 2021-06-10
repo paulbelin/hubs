@@ -126,6 +126,22 @@ export default class SceneEntryManager {
     if (muteOnEntry) {
       this.scene.emit("action_mute");
     }
+
+    // Send a Google Analytics custom event
+    const hubId = qs.get("hub_id") || document.location.pathname.substring(1).split("/")[0];
+    const data = {
+      displayName: this.avatarRig.components["player-info"].displayName,
+      muteOnEntry,
+      enterInVR,
+      isMobile,
+      isMobileVR,
+      isIOS
+    };
+    window.ga("send", "event", `Room ${hubId}`, "entered", JSON.stringify(data), {
+      hitCallback: function() {
+        console.log("Event sent to GA", data);
+      }
+    });
   };
 
   whenSceneLoaded = callback => {
@@ -612,8 +628,8 @@ export default class SceneEntryManager {
     const audioStream = audioEl.captureStream
       ? audioEl.captureStream()
       : audioEl.mozCaptureStream
-        ? audioEl.mozCaptureStream()
-        : null;
+      ? audioEl.mozCaptureStream()
+      : null;
 
     if (audioStream) {
       let audioVolume = Number(qs.get("audio_volume") || "1.0");
