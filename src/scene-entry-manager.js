@@ -137,11 +137,9 @@ export default class SceneEntryManager {
       isMobileVR,
       isIOS
     };
-    window.ga("send", "event", `Room ${hubId}`, "entered", JSON.stringify(data), {
-      hitCallback: function() {
-        console.log("Event sent to GA", data);
-      }
-    });
+    if (typeof window.ga === "function") {
+      window.ga("send", "event", `Room ${hubId}`, "entered", JSON.stringify(data));
+    }
   };
 
   whenSceneLoaded = callback => {
