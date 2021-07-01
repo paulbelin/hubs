@@ -44,6 +44,7 @@ export function RoomEntryModal({
           </h5>
           <p>{roomName}</p>
         </div>
+
         <Column center className={styles.buttons}>
           {showJoinRoom && (
             <Button preset="accent4" onClick={onJoinRoom}>
@@ -53,8 +54,11 @@ export function RoomEntryModal({
               </span>
             </Button>
           )}
+        </Column>
+        <hr className={styleUtils.showLg} />
+        <div className={styles.secondaryButtons}>
           {showEnterOnDevice && (
-            <Button preset="accent5" onClick={onEnterOnDevice}>
+            <Button preset="transparent" onClick={onEnterOnDevice}>
               <VRIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.enter-on-device-button" defaultMessage="Enter On Device" />
@@ -62,7 +66,7 @@ export function RoomEntryModal({
             </Button>
           )}
           {showSpectate && (
-            <Button preset="accent2" onClick={onSpectate}>
+            <Button preset="transparent" onClick={onSpectate}>
               <ShowIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.spectate-button" defaultMessage="Spectate" />
@@ -71,17 +75,14 @@ export function RoomEntryModal({
           )}
           {showOptions &&
             breakpoint !== "sm" && (
-              <>
-                <hr className={styleUtils.showLg} />
-                <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
-                  <SettingsIcon />
-                  <span>
-                    <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
-                  </span>
-                </Button>
-              </>
+              <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
+                <SettingsIcon />
+                <span>
+                  <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
+                </span>
+              </Button>
             )}
-        </Column>
+        </div>
       </Column>
     </Modal>
   );
