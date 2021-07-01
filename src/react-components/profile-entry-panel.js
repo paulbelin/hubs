@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { SCHEMA } from "../storage/store";
 import { fetchAvatar } from "../utils/avatar-utils";
-import { replaceHistoryState } from "../utils/history";
+import { pushHistoryState, replaceHistoryState } from "../utils/history";
 import { AvatarSettingsSidebar } from "./room/AvatarSettingsSidebar";
 import { AvatarSetupModal } from "./room/AvatarSetupModal";
 import AvatarPreview from "./avatar-preview";
@@ -132,6 +132,10 @@ export default class ProfileEntryPanel extends Component {
       onChangeAvatar: e => {
         e.preventDefault();
         this.props.mediaSearchStore.sourceNavigateWithNoNav("avatars", "use");
+      },
+      onCreateAvatarFromRPM: e => {
+        e.preventDefault();
+        pushHistoryState(this.props.history, "overlay", "avatar-editor-rpm");
       },
       onSubmit: this.saveStateAndFinish,
       onClose: this.props.onClose,

@@ -28,6 +28,7 @@ import MediaBrowserContainer from "./media-browser";
 
 import EntryStartPanel from "./entry-start-panel.js";
 import AvatarEditor from "./avatar-editor";
+import AvatarEditorRPM from "./avatar-editor-rpm";
 import PreferencesScreen from "./preferences-screen.js";
 import PresenceLog from "./presence-log.js";
 import PreloadOverlay from "./preload-overlay.js";
@@ -1321,6 +1322,28 @@ class UIRoot extends Component {
                     debug={avatarEditorDebug}
                     avatarId={props.location.state.detail && props.location.state.detail.avatarId}
                     hideDelete={props.location.state.detail && props.location.state.detail.hideDelete}
+                  />
+                )}
+              />
+            )}
+            {!this.state.dialog && (
+              <StateRoute
+                stateKey="overlay"
+                stateValue="avatar-editor-rpm"
+                history={this.props.history}
+                render={props => (
+                  <AvatarEditorRPM
+                    {...props}
+                    className={styles.avatarEditor}
+                    onSave={url => {
+                      this.props.history.goBack();
+                      this.props.store.update({ profile: { ...this.props.store.state.profile, ...{ avatarId: url } } });
+                      this.props.scene.emit("avatar_updated");
+                      console.log("custom avatar updated", url);
+                    }}
+                    onClose={() => this.props.history.goBack()}
+                    store={this.props.store}
+                    scene={this.props.scene}
                   />
                 )}
               />

@@ -14,6 +14,7 @@ export function AvatarSettingsContent({
   avatarPreview,
   displayNamePattern,
   onChangeAvatar,
+  onCreateAvatarFromRPM,
   ...rest
 }) {
   return (
@@ -40,7 +41,16 @@ export function AvatarSettingsContent({
           <FormattedMessage id="avatar-settings-content.change-avatar-button" defaultMessage="Select Avatar" />
         </Button>
       </div>
-      <AcceptButton preset="accept" type="submit" />
+      {/* <AcceptButton preset="accept" type="submit" /> */}
+      <div className={styles.flex}>
+        <AcceptButton preset="accept" type="submit" />
+        <Button type="button" preset="accent2" onClick={onCreateAvatarFromRPM}>
+          <FormattedMessage
+            id="avatar-settings-content.create-custom-avatar-button"
+            defaultMessage="Create your avatar"
+          />
+        </Button>
+      </div>
     </Column>
   );
 }
@@ -53,5 +63,6 @@ AvatarSettingsContent.propTypes = {
   displayNamePattern: PropTypes.string,
   onChangeDisplayName: PropTypes.func,
   avatarPreview: PropTypes.node,
-  onChangeAvatar: PropTypes.func
+  onChangeAvatar: PropTypes.func,
+  onCreateAvatarFromRPM: PropTypes.func
 };
