@@ -31,3 +31,8 @@
     margin-bottom: 8px;
   }
 }
+
+:local(.flex) {
+  display: flex;
+  column-gap: 16px;
+}
