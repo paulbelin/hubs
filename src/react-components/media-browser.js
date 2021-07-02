@@ -573,6 +573,14 @@ class MediaBrowserContainer extends Component {
                 />
               );
             })}
+            {urlSource === "avatars" &&
+              this.props.hubChannel.signedIn && (
+                <CreateTile
+                  type="avatar"
+                  onClick={this.onCreateAvatar}
+                  label={<FormattedMessage id="media-browser.create-avatar" defaultMessage="Create Avatar" />}
+                />
+              )}
           </>
         ) : null}
       </MediaBrowser>

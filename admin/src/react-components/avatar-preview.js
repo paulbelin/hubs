@@ -306,7 +306,10 @@ class AvatarPreview extends Component {
               srcSet="hubs/src/assets/images/warning_icon@2x.png 2x"
               className="error-icon"
             />
-            <FormattedMessage id="avatar-preview.loading-failed" />
+            <FormattedMessage
+              id="avatar-preview.loading-failed"
+              defaultMessage="Loading failed\nPlease choose another avatar"
+            />
           </div>
         )}
         <canvas ref={c => (this.canvas = c)} />
