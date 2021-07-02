@@ -30,7 +30,7 @@
 
 :local(.object-menu-container) {
   position: absolute;
-  bottom: 16px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -59,7 +59,7 @@
 
 :local(.header) {
   display: none;
-  height: 48px;
+  height: 36px;
   align-items: center;
   justify-content: center;
 
@@ -85,6 +85,7 @@
 
   @media(min-width: theme.$breakpoint-lg) and (min-height: theme.$breakpoint-vr) {
     padding-top: 0;
+    padding-bottom: 4px;
   }
 }
 
